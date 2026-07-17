@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي خوارزمية K-Means التفاعلي 🧠</title>
+    <!-- استدعاء خط Tajawal الجميل واستدعاء Tailwind CSS للتصميم العصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- شريط العنوان -->
+    <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-teal-400">🧠 محاكي خوارزمية K-Means التفاعلي</h1>
+            <span class="bg-slate-700 text-slate-300 text-xs md:text-sm px-3 py-1 rounded-full border border-slate-600">خاص لطلاب علم البيانات 🎓</span>
+        </div>
+    </header>
+
+    <!-- محتوى الصفحة الرئيسي -->
+    <main class="max-w-4xl mx-auto p-4 md:p-6 w-full flex-grow">
+        <div class="bg-slate-800 rounded-2xl p-6 shadow-xl border border-slate-700 flex flex-col items-center">
+            
+            <!-- لوحة التحكم والمعلومات -->
+            <div class="w-full mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div class="bg-slate-750 p-3 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-400 block">الحالة الحالية</span>
+                    <span id="status-text" class="text-base font-bold text-yellow-400">التهيئة المبدئية</span>
+                </div>
+                <div class="bg-slate-750 p-3 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-400 block">التكرار (Iteration)</span>
+                    <span id="iteration-counter" class="text-base font-bold text-teal-400">0</span>
+                </div>
+                <div class="bg-slate-750 p-3 rounded-lg border border-slate-700 flex items-center justify-center">
+                    <span class="inline-block w-3 h-3 rounded-full bg-red-500 ml-2"></span> <span class="text-xs text-slate-300 ml-4">المجموعة 1</span>
+                    <span class="inline-block w-3 h-3 rounded-full bg-blue-500 ml-2"></span> <span class="text-xs text-slate-300 ml-4">المجموعة 2</span>
+                    <span class="inline-block w-3 h-3 rounded-full bg-emerald-500 ml-2"></span> <span class="text-xs text-slate-300">المجموعة 3</span>
+                </div>
+            </div>
+
+            <!-- لوحة الرسم (Canvas) -->
+            <div class="relative w-full max-w-[600px] aspect-[4/3] bg-slate-950 rounded-xl border-2 border-slate-700 overflow-hidden shadow-inner">
+                <canvas id="kmeansCanvas" class="w-full h-full block"></canvas>
+            </div>
+
+            <!-- صندوق الشرح التوضيحي المباشر -->
+            <div class="w-full mt-6 p-4 bg-slate-900/50 rounded-xl border border-slate-750 text-slate-300 text-sm leading-relaxed">
+                <span class="text-teal-400 font-bold block mb-1">ماذا يحدث الآن؟</span>
+                <p id="step-description">النقاط مبعثرة في الفراغ بشكل عشوائي، والمراكز المبدئية (العلامات X الصفراء) تم وضعها عشوائياً أيضاً. اضغط "الخطوة التالية" لبدء الخوارزمية!</p>
+            </div>
+
+            <!-- أزرار التحكم -->
+            <div class="mt-6 flex flex-wrap gap-4 justify-center">
+                <button id="next-btn" class="bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold py-3 px-8 rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-105 active:scale-95 text-base">
+                    الخطوة التالية ➡️
+                </button>
+                <button id="reset-btn" class="bg-slate-700 hover:bg-slate-650 text-slate-200 font-semibold py-3 px-6 rounded-xl border border-slate-600 transition duration-200 ease-in-out">
+                    إعادة ضبط عشوائي 🔄
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- تذييل الصفحة -->
+    <footer class="bg-slate-800 border-t border-slate-700 py-4 px-6 text-center text-xs text-slate-400">
+        <p>VEFA  Education</p>
+    </footer>
+
+    <!-- منطق الجافاسكريبت التفاعلي -->
+    <script>
+        const canvas = document.getElementById('kmeansCanvas');
+        const ctx = canvas.getContext('2d');
+        const nextBtn = document.getElementById('next-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const statusText = document.getElementById('status-text');
+        const iterCounter = document.getElementById('iteration-counter');
+        const stepDesc = document.getElementById('step-description');
+
+        // أبعاد الـ Canvas الداخلية الثابتة لمنع التشوه
+        const WIDTH = 600;
+        const HEIGHT = 450;
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+
+        let points = [];
+        let centroids = [];
+        let assignments = []; // يعادل مصفوفة idx في بايثون
+        let step = 'init'; // الحالات الممكنة: 'init', 'assign', 'update', 'done'
+        let iteration = 0;
+        const K = 3;
+
+        // تلوين المجموعات والمراكز المقابلة لها
+        const colors = {
+            unassigned: '#94a3b8', // رمادي
+            centroids: ['#ef4444', '#3b82f6', '#10b981'], // أحمر، أزرق، أخضر
+            points: ['rgba(239, 68, 68, 0.7)', 'rgba(59, 130, 246, 0.7)', 'rgba(16, 185, 129, 0.7)']
+        };
+
+        // 1. توليد 3 تكتلات حقيقية من البيانات لضمان تجربة بصرية واضحة
+        function generateData() {
+            points = [];
+            assignments = [];
+            iteration = 0;
+            iterCounter.textContent = iteration;
+            
+            // تكتل 1: أعلى اليسار
+            for(let i=0; i<20; i++) {
+                points.push({
+                    x: 120 + (Math.random() - 0.5) * 80,
+                    y: 120 + (Math.random() - 0.5) * 80
+                });
+                assignments.push(-1);
+            }
+            // تكتل 2: وسط اليمين
+            for(let i=0; i<20; i++) {
+                points.push({
+                    x: 480 + (Math.random() - 0.5) * 80,
+                    y: 200 + (Math.random() - 0.5) * 80
+                });
+                assignments.push(-1);
+            }
+            // تكتل 3: أسفل الوسط
+            for(let i=0; i<20; i++) {
+                points.push({
+                    x: 300 + (Math.random() - 0.5) * 80,
+                    y: 350 + (Math.random() - 0.5) * 80
+                });
+                assignments.push(-1);
+            }
+        }
+
+        // 2. اختيار مراكز مبدئية عشوائية تماماً في الفضاء الثنائي الأبعاد
+        function initCentroids() {
+            centroids = [];
+            for(let k=0; k<K; k++) {
+                centroids.push({
+                    x: 50 + Math.random() * (WIDTH - 100),
+                    y: 50 + Math.random() * (HEIGHT - 100)
+                });
+            }
+            step = 'init';
+            statusText.textContent = "التهيئة المبدئية";
+            statusText.className = "text-base font-bold text-yellow-400";
+            stepDesc.innerHTML = "تم وضع 3 مراكز عشوائية (علامات X صفراء). الآن اضغط <strong>'الخطوة التالية'</strong> للبدء بخطوة التنسيب (Assign Points).";
+            draw();
+        }
+
+        // 3. دالة حساب المسافة الإقليدية (تطابق np.linalg.norm في البايثون)
+        function getDistance(p1, p2) {
+            return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+        }
+
+        // 4. خطوة التنسيب: تعادل تماماً find_closest_centroids
+        function assignCentroids() {
+            let changed = false;
+            for(let i=0; i<points.length; i++) {
+                let minDist = Infinity;
+                let closestIndex = -1;
+                
+                for(let j=0; j<K; j++) {
+                    let dist = getDistance(points[i], centroids[j]);
+                    if(dist < minDist) {
+                        minDist = dist;
+                        closestIndex = j;
+                    }
+                }
+                if(assignments[i] !== closestIndex) {
+                    assignments[i] = closestIndex;
+                    changed = true;
+                }
+            }
+            iteration++;
+            iterCounter.textContent = iteration;
+            step = 'update';
+            statusText.textContent = "تنسيب النقاط للمراكز";
+            statusText.className = "text-base font-bold text-orange-400";
+            stepDesc.innerHTML = "<strong>الآن يعمل المعالج كدالة find_closest_centroids:</strong> قام بقياس المسافة الإقليدية بين كل نقطة والمراكز الثلاثة، وقام بضم كل نقطة للمجموعة الأقرب لها (تلوين النقاط بالأحمر أو الأزرق أو الأخضر).";
+            draw();
+        }
+
+        // 5. خطوة تحديث المراكز: تعادل تماماً compute_centroids
+        function updateCentroids() {
+            let changed = false;
+            const threshold = 0.5; // لو تحرك المركز بأقل من هذا المقدار نعتبره مستقراً
+
+            for(let k=0; k<K; k++) {
+                // فلترة النقاط التابعة للمركز k (Logical Indexing)
+                let sumX = 0, sumY = 0, count = 0;
+                for(let i=0; i<points.length; i++) {
+                    if(assignments[i] === k) {
+                        sumX += points[i].x;
+                        sumY += points[i].y;
+                        count++;
+                    }
+                }
+
+                if(count > 0) {
+                    let newX = sumX / count;
+                    let newY = sumY / count;
+
+                    // التحقق مما إذا كان هناك حركة حقيقية للمركز
+                    if(Math.abs(centroids[k].x - newX) > threshold || Math.abs(centroids[k].y - newY) > threshold) {
+                        changed = true;
+                    }
+
+                    // تحديث المركز إلى الموضع الجديد (المتوسط الحسابي)
+                    centroids[k].x = newX;
+                    centroids[k].y = newY;
+                }
+            }
+
+            if(!changed) {
+                step = 'done';
+                statusText.textContent = "استقرار تام (Convergence)";
+                statusText.className = "text-base font-bold text-emerald-400";
+                stepDesc.innerHTML = "🎉 <strong>مبروك! الخوارزمية استقرت بنجاح!</strong> المراكز الجديدة لم تعد تتحرك لأنها أصبحت في منتصف ثقل نقاطها بالضبط. لو قمنا بتشغيل خطوات إضافية فلن يتغير شيء.";
+            } else {
+                step = 'assign';
+                statusText.textContent = "تحديث مواقع المراكز";
+                statusText.className = "text-base font-bold text-teal-400";
+                stepDesc.innerHTML = "<strong>الآن يعمل المعالج كدالة compute_centroids:</strong> تم عزل نقاط كل فريق، وحساب متوسط إحداثياتهم (Mean)، ثم سحب علامة الـ X لتكون في المنتصف تماماً. اضغط الخطوة التالية لإعادة التنسيب حول المواضع الجديدة.";
+            }
+            draw();
+        }
+
+        // 6. دالة الرسم البصري على الـ Canvas
+        function draw() {
+            // مسح الشاشة
+            ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+            // رسم خطوط الشبكة الخلفية بلون باهت
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            for(let x=0; x<WIDTH; x+=40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, HEIGHT);
+                ctx.stroke();
+            }
+            for(let y=0; y<HEIGHT; y+=40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(WIDTH, y);
+                ctx.stroke();
+            }
+
+            // رسم نقاط البيانات
+            for(let i=0; i<points.length; i++) {
+                ctx.beginPath();
+                ctx.arc(points[i].x, points[i].y, 6, 0, 2 * Math.PI);
+                const clusterId = assignments[i];
+                ctx.fillStyle = clusterId === -1 ? colors.unassigned : colors.points[clusterId];
+                ctx.fill();
+                ctx.strokeStyle = '#0f172a';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+
+            // رسم مراكز المجموعات (علامات X الكبيرة)
+            for(let k=0; k<K; k++) {
+                const cx = centroids[k].x;
+                const cy = centroids[k].y;
+                const size = 12;
+
+                ctx.strokeStyle = step === 'init' ? '#eab308' : colors.centroids[k]; // أصفر بالبداية، ثم لون التكتل
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+
+                // رسم خطي الـ X
+                ctx.beginPath();
+                ctx.moveTo(cx - size, cy - size);
+                ctx.lineTo(cx + size, cy + size);
+                ctx.moveTo(cx + size, cy - size);
+                ctx.lineTo(cx - size, cy + size);
+                ctx.stroke();
+
+                // رسم هالة حول علامة الـ X لتمييزها
+                ctx.beginPath();
+                ctx.arc(cx, cy, size + 4, 0, 2 * Math.PI);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+        }
+
+        // 7. إدارة الأحداث والتحكم بالضغط
+        nextBtn.addEventListener('click', () => {
+            if(step === 'init') {
+                assignCentroids();
+            } else if(step === 'assign') {
+                assignCentroids();
+            } else if(step === 'update') {
+                updateCentroids();
+            } else if(step === 'done') {
+                alert("الخوارزمية مستقرة تماماً بالفعل! اضغط 'إعادة ضبط عشوائي' للتجربة من جديد بمواقع مختلفة.");
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            generateData();
+            initCentroids();
+        });
+
+        // تشغيل المحاكي لأول مرة تلقائياً
+        generateData();
+        initCentroids();
+    </script>
+</body>
+</html>
