@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Practice Exam: K-Means Clustering & Image Segmentation</title>
+    <style>
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+                font-size: 11pt;
+            }
+            .no-print {
+                display: none;
+            }
+            .question-card {
+                page-break-inside: avoid;
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a202c;
+            background-color: #f7fafc;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .exam-header {
+            border-bottom: 3px double #2b6cb0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .exam-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 26px;
+            color: #1a365d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .exam-header h2 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #3182ce;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .question-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 12px;
+        }
+
+        .options-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .options-list li {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background-color: #f8fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 4px;
+            font-size: 14.5px;
+        }
+
+        .answer-box {
+            background-color: #ebf8ff;
+            border: 1px solid #bee3f8;
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-size: 14px;
+            color: #2b6cb0;
+        }
+
+        .answer-box strong {
+            color: #2c5282;
+        }
+
+        .print-btn {
+            display: block;
+            width: 220px;
+            margin: 0 auto 30px auto;
+            padding: 12px 20px;
+            background-color: #3182ce;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .print-btn:hover {
+            background-color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Print Exam / Export PDF</button>
+
+<div class="container">
+    <div class="exam-header">
+        <h1>Advanced Computer Vision & Data Science</h1>
+        <h2>Comprehensive Practice Examination: K-Means Clustering & Image Segmentation</h2>
+        <div class="meta-info">
+            <span><strong>Total Items:</strong> 70 Multiple Choice Questions</span>
+            <span><strong>Format:</strong> Analytical / Scenario-Based</span>
+            <span><strong>Coverage:</strong> Chapter 2 (Full Syllabus)</span>
+        </div>
+    </div>
+
+    <!-- Question 1 -->
+    <div class="question-card">
+        <div class="question-title">1. What fundamental distinction separates clustering from classification in machine learning workflows?</div>
+        <ul class="options-list">
+            <li>A) Classification handles continuous targets, whereas clustering handles discrete ordinal variables.</li>
+            <li>B) Classification is a supervised task requiring predefined target labels, whereas clustering is an unsupervised task that groups unlabeled instances based on feature similarities.</li>
+            <li>C) Classification relies entirely on distance metrics, while clustering uses decision trees exclusively.</li>
+            <li>D) Clustering requires explicit ground-truth evaluation metrics during model training, unlike classification.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Classification maps inputs to predetermined target labels (supervised), whereas clustering identifies inherent structures and groupings within unlabeled data (unsupervised).
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question-card">
+        <div class="question-title">2. In a real-world scenario involving botanical discovery (e.g., observing unknown plant species on a hike), how does clustering operate without expert domain labels?</div>
+        <ul class="options-list">
+            <li>A) It queries an external database via supervised API calls to classify plant taxonomy.</li>
+            <li>B) It groups plants based on observable morphological similarities (features) without requiring prior taxonomic knowledge.</li>
+            <li>C) It calculates the probability of plant survival using linear regression models.</li>
+            <li>D) It forces all observed plants into a single pre-existing botanical category.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Clustering aggregates instances by analyzing feature similarities directly from raw data, enabling pattern discovery without ground-truth taxonomy.
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question-card">
+        <div class="question-title">3. When analyzing the Iris dataset using petal length and petal width features, why is detecting the top-right clusters more challenging for clustering algorithms than detecting the bottom-left cluster?</div>
+        <ul class="options-list">
+            <li>A) The bottom-left cluster (Setosa) is linearly separable and well-isolated, while Versicolor and Virginica overlap closely in 2D space.</li>
+            <li>B) The Setosa cluster contains extreme numerical outliers that distort feature scaling.</li>
+            <li>C) Versicolor and Virginica have zero variance in petal dimensions.</li>
+            <li>D) The Iris dataset contains missing values in petal dimensions.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Iris setosa forms a distinct, isolated cluster, whereas Iris versicolor and Iris virginica lie close together with overlapping boundaries in a 2D petal feature plane.
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question-card">
+        <div class="question-title">4. How does incorporating additional unvisualized features (e.g., sepal length and sepal width) impact clustering performance on complex datasets like Iris?</div>
+        <ul class="options-list">
+            <li>A) Extra features always degrade clustering due to mandatory curse of dimensionality penalties.</li>
+            <li>B) It provides higher-dimensional separability, enabling algorithms like Gaussian Mixture Models to correctly assign nearly all instances (e.g., 145 out of 150).</li>
+            <li>C) It forces K-Means to convert distance metrics from Euclidean to Manhattan distance.</li>
+            <li>D) It reduces the number of usable instances in the dataset by half.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Additional relevant features add discriminative information across higher-dimensional space, improving separation between overlapping sub-clusters.
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question-card">
+        <div class="question-title">5. The standard K-Means algorithm is also historically known as which of the following?</div>
+        <ul class="options-list">
+            <li>A) The Expectation-Maximization Gradient Algorithm</li>
+            <li>B) The Lloyd–Forgy Algorithm</li>
+            <li>C) The Elkan-Dunn Heuristic</li>
+            <li>D) The Voronoi Partitioning Matrix</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> K-Means is widely referred to as the Lloyd–Forgy algorithm, reflecting its foundational development by Stuart Lloyd and Edward Forgy.
+        </div>
+    </div>
+
+
+    <!-- Question 6 -->
+    <div class="question-card">
+        <div class="question-title">6. What is the fundamental requirement regarding the hyperparameter $k$ before training a standard K-Means clusterer in Scikit-Learn?</div>
+        <ul class="options-list">
+            <li>A) $k$ must be dynamically estimated by the algorithm at runtime.</li>
+            <li>B) $k$ must be explicitly specified by the user prior to fitting the model.</li>
+            <li>C) $k$ must equal the total number of features in dataset $X$.</li>
+            <li>D) $k$ must be set to an odd number to avoid tie-breaking in centroid assignment.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Standard K-Means requires the target number of clusters ($k$) to be defined beforehand as a hyperparameter (`n_clusters=k`).
+        </div>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question-card">
+        <div class="question-title">7. In Scikit-Learn, after fitting a `KMeans` instance on an unlabeled dataset `X`, where are the predicted cluster assignments for the training instances stored?</div>
+        <ul class="options-list">
+            <li>A) In the `kmeans.centroids_` array.</li>
+            <li>B) In the `kmeans.labels_` instance variable.</li>
+            <li>C) In the `kmeans.inertia_matrix_` variable.</li>
+            <li>D) In the `kmeans.predictions_` object method.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Scikit-Learn preserves the predicted cluster labels of training instances in the `labels_` attribute.
+        </div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question-card">
+        <div class="question-title">8. What information is stored in the Scikit-Learn attribute `kmeans.cluster_centers_`?</div>
+        <ul class="options-list">
+            <li>A) The row indices of the nearest instance to each cluster center.</li>
+            <li>B) A 2D array of shape $(k, n\_features)$ containing the coordinates of the $k$ cluster centroids.</li>
+            <li>C) The total WCSS values for each iteration.</li>
+            <li>D) The bounding box coordinates of Voronoi decision boundaries.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> `cluster_centers_` stores the final mean coordinates (centroids) of each cluster across all feature dimensions.
+        </div>
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question-card">
+        <div class="question-title">9. When predicting cluster assignments for new unseen instances using `kmeans.predict(X_new)`, how does the model assign each new instance?</div>
+        <ul class="options-list">
+            <li>A) By re-running the full iterative training process including all historical data.</li>
+            <li>B) By assigning each instance to the cluster with the nearest centroid based on minimum distance.</li>
+            <li>C) By calculating a weighted average of all surrounding points regardless of centroids.</li>
+            <li>D) By assigning instances randomly to ensure cluster sizes remain balanced.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Inference in K-Means involves calculating distance from the new point to all existing centroids and assigning it to the closest one.
+        </div>
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question-card">
+        <div class="question-title">10. What geometric structure defines the decision boundaries generated by K-Means in feature space?</div>
+        <ul class="options-list">
+            <li>A) Ellipsoidal Confidence Intervals</li>
+            <li>B) Voronoi Tessellation</li>
+            <li>C) Non-linear Radial Manifolds</li>
+            <li>D) Hyper-dimensional Splines</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Partitioning space based on closest centroid distance produces linear decision boundaries forming a Voronoi tessellation.
+        </div>
+    </div>
+
+    <!-- Question 11 -->
+    <div class="question-card">
+        <div class="question-title">11. What primary issue can occur along the decision boundaries of a Voronoi tessellation in K-Means?</div>
+        <ul class="options-list">
+            <li>A) Centroids collapse to zero coordinates.</li>
+            <li>B) Instances near boundary regions may be mislabeled due to overlapping distributions or noise.</li>
+            <li>C) Distance values become negative.</li>
+            <li>D) The algorithm triggers an infinite loop during inference.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Linear Voronoi boundaries strictly separate space; points near the border where clusters overlap are prone to misclassification.
+        </div>
+    </div>
+
+    <!-- Question 12 -->
+    <div class="question-card">
+        <div class="question-title">12. What is the fundamental operational difference between Hard Clustering and Soft Clustering?</div>
+        <ul class="options-list">
+            <li>A) Hard clustering uses floating-point numbers; soft clustering uses integers.</li>
+            <li>B) Hard clustering assigns each instance to a single cluster; soft clustering assigns a score/affinity per cluster.</li>
+            <li>C) Hard clustering runs on GPU; soft clustering runs on CPU.</li>
+            <li>D) Hard clustering requires normalized features; soft clustering forbids feature scaling.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Hard clustering enforces exclusive membership to one cluster, whereas soft clustering assigns membership degrees or similarity scores across multiple clusters.
+        </div>
+    </div>
+
+    <!-- Question 13 -->
+    <div class="question-card">
+        <div class="question-title">13. In Soft Clustering, which metric or function can be used to compute an instance's affinity to a cluster centroid?</div>
+        <ul class="options-list">
+            <li>A) The categorical cross-entropy loss.</li>
+            <li>B) The Euclidean distance or a similarity kernel such as the Gaussian Radial Basis Function (RBF).</li>
+            <li>C) The determinant of the covariance matrix.</li>
+            <li>D) The discrete second derivative of the label vector.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Soft clustering scores often utilize inverse distances or Gaussian RBF kernels to express relative similarity/affinity to centroids.
+        </div>
+    </div>
+
+    <!-- Question 14 -->
+    <div class="question-card">
+        <div class="question-title">14. When using the `kmeans.transform(X_new)` method in Scikit-Learn, what output is produced?</div>
+        <ul class="options-list">
+            <li>A) The principal components of `X_new`.</li>
+            <li>B) The distance from each instance in `X_new` to every cluster centroid.</li>
+            <li>C) The standard scaled values of `X_new`.</li>
+            <li>D) A boolean array indicating outlier positions.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> `transform()` measures and returns the Euclidean distance from each sample to all $k$ centroids.
+        </div>
+    </div>
+
+    <!-- Question 15 -->
+    <div class="question-card">
+        <div class="question-title">15. How can K-Means be utilized as an efficient Non-linear Dimensionality Reduction technique?</div>
+        <ul class="options-list">
+            <li>A) By replacing feature columns with binary flags indicating whether $k$ is even or odd.</li>
+            <li>B) By transforming a high-dimensional dataset into a $k$-dimensional dataset where features represent distances to the $k$ centroids.</li>
+            <li>C) By projecting points onto a 1D line passing through the global mean.</li>
+            <li>D) By removing all instances located outside the main cluster center.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Using `transform()`, a dataset with $D$ features is re-represented as $k$ distance features (to centroids), achieving non-linear dimension reduction.
+        </div>
+    </div>
+
+
+    <!-- Question 16 -->
+    <div class="question-card">
+        <div class="question-title">16. Why does the standard K-Means algorithm initialize by randomly placing centroids when training starts?</div>
+        <ul class="options-list">
+            <li>A) Because initial labels and initial centroids are both unknown at the start of unsupervised learning.</li>
+            <li>B) To guarantee reaching the global minimum of WCSS in a single step.</li>
+            <li>C) Because random placement eliminates the need for calculating distances.</li>
+            <li>D) To prevent the algorithm from converging too quickly.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> In unlabeled data, neither cluster assignments nor centroid locations are known initially, necessitating initial random centroid positioning.
+        </div>
+    </div>
+
+    <!-- Question 17 -->
+    <div class="question-card">
+        <div class="question-title">17. What are the core alternating steps in the iterative K-Means algorithm (Lloyd-Forgy)?</div>
+        <ul class="options-list">
+            <li>A) Step 1: Feature scaling; Step 2: Outlier deletion.</li>
+            <li>B) Step 1: Assign instances to the nearest centroid; Step 2: Update centroids based on the mean of instances in each cluster.</li>
+            <li>C) Step 1: Compute Silhouette scores; Step 2: Drop the smallest cluster.</li>
+            <li>D) Step 1: Apply PCA; Step 2: Fit linear regression.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> K-Means alternates between cluster assignment (assigning points to nearest centroid) and centroid updating (recomputing cluster means).
+        </div>
+    </div>
+
+    <!-- Question 18 -->
+    <div class="question-card">
+        <div class="question-title">18. Under what condition does the iterative K-Means process terminate?</div>
+        <ul class="options-list">
+            <li>A) When WCSS reaches exactly zero.</li>
+            <li>B) When centroids stop moving (their locations stabilize) or maximum iteration limit is reached.</li>
+            <li>C) When the Silhouette score drops below zero.</li>
+            <li>D) When all clusters contain an identical number of data points.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Convergence occurs when centroid updates produce no changes in position (or when maximum iterations are exhausted).
+        </div>
+    </div>
+
+    <!-- Question 19 -->
+    <div class="question-card">
+        <div class="question-title">19. Given points $P_1 = (2, 10)$ and $P_2 = (5, 8)$, what is the Euclidean distance $d(P_1, P_2)$ between them?</div>
+        <ul class="options-list">
+            <li>A) $5.00$</li>
+            <li>B) $3.61$</li>
+            <li>C) $13.00$</li>
+            <li>D) $7.21$</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> $d = \sqrt{(5-2)^2 + (8-10)^2} = \sqrt{3^2 + (-2)^2} = \sqrt{9 + 4} = \sqrt{13} \approx 3.61$.
+        </div>
+    </div>
+
+    <!-- Question 20 -->
+    <div class="question-card">
+        <div class="question-title">20. In an iteration of K-Means, Cluster 1 contains the points $(1, 2)$ and $(2, 5)$. What are the coordinates of the updated centroid?</div>
+        <ul class="options-list">
+            <li>A) $(1.5, 3.5)$</li>
+            <li>B) $(3.0, 7.0)$</li>
+            <li>C) $(1.0, 2.5)$</li>
+            <li>D) $(2.0, 5.0)$</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Centroid $x = \frac{1+2}{2} = 1.5$, $y = \frac{2+5}{2} = 3.5$. New centroid coordinate is $(1.5, 3.5)$.
+        </div>
+    </div>
+
+    <!-- Question 21 -->
+    <div class="question-card">
+        <div class="question-title">21. What mathematical property guarantees that the K-Means algorithm will always converge in a finite number of steps?</div>
+        <ul class="options-list">
+            <li>A) The mean squared distance strictly decreases (or stays equal) at each step and is bounded below by zero.</li>
+            <li>B) The number of feature dimensions decreases continuously during training.</li>
+            <li>C) The centroids follow a strictly linear gradient descent trajectory.</li>
+            <li>D) The Silhouette score increases monotonically without upper bound.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Every assignment and centroid update step reduces or maintains the non-negative WCSS cost function, guaranteeing convergence in finite iterations.
+        </div>
+    </div>
+
+    <!-- Question 22 -->
+    <div class="question-card">
+        <div class="question-title">22. Although convergence is guaranteed in K-Means, what major optimization risk exists?</div>
+        <ul class="options-list">
+            <li>A) The algorithm may oscillate endlessly between positive and negative centroids.</li>
+            <li>B) The algorithm may converge to a local optimum rather than the global optimum due to unlucky random centroid initialization.</li>
+            <li>C) WCSS may become negative if initial points are too far apart.</li>
+            <li>D) Feature dimensions may collapse to zero.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> K-Means objective function is non-convex, meaning poor initial centroid selection can lock the model into a suboptimal local minimum.
+        </div>
+    </div>
+
+    <!-- Question 23 -->
+    <div class="question-card">
+        <div class="question-title">23. How does Scikit-Learn’s default `KMeans` configuration mitigate the local optima problem?</div>
+        <ul class="options-list">
+            <li>A) By using median values instead of mean values.</li>
+            <li>B) By running the algorithm multiple times (default `n_init=10`) with different random initializations and selecting the model with lowest inertia.</li>
+            <li>C) By dropping 20% of data points before training.</li>
+            <li>D) By enforcing $k=2$ automatically.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Running multiple random initializations (`n_init`) and retaining the result with the lowest Inertia drastically reduces the chance of remaining stuck in a local minimum.
+        </div>
+    </div>
+
+    <!-- Question 24 -->
+    <div class="question-card">
+        <div class="question-title">24. What does the Inertia metric (WCSS) measure in a trained K-Means model?</div>
+        <ul class="options-list">
+            <li>A) The sum of squared distances between instances and their closest centroid.</li>
+            <li>B) The average distance between different cluster centroids.</li>
+            <li>C) The ratio of features to instances.</li>
+            <li>D) The execution time per iteration.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Inertia (Within-Cluster Sum of Squares) quantifies cluster compactness by summing squared Euclidean distances from points to assigned centroids.
+        </div>
+    </div>
+
+    <!-- Question 25 -->
+    <div class="question-card">
+        <div class="question-title">25. How does Scikit-Learn’s `score()` method for `KMeans` report model performance, and why?</div>
+        <ul class="options-list">
+            <li>A) It returns positive inertia because higher values represent better models.</li>
+            <li>B) It returns negative inertia to adhere to Scikit-Learn’s convention that "greater (higher) score is better".</li>
+            <li>C) It returns the Silhouette score scaled between $0$ and $100$.</li>
+            <li>D) It returns the total number of iterations.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Scikit-Learn API maximizes scores. Because lower inertia represents better clustering, `score()` returns negative inertia (`-inertia_`).
+        </div>
+    </div>
+
+
+    <!-- Question 26 -->
+    <div class="question-card">
+        <div class="question-title">26. What is the core innovation of the K-Means++ initialization algorithm compared to standard random initialization?</div>
+        <ul class="options-list">
+            <li>A) It selects centroids based on maximum feature variances.</li>
+            <li>B) It selects initial centroids that are distant from one another using a probability distribution proportional to squared distance $D(x)^2$ from the nearest existing centroid.</li>
+            <li>C) It picks all initial centroids directly from the outer boundary of the dataset.</li>
+            <li>D) It places all initial centroids at the origin $(0,0)$.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> K-Means++ favors choosing initial centroids far from already chosen centroids, significantly reducing the probability of poor local optima convergence.
+        </div>
+    </div>
+
+    <!-- Question 27 -->
+    <div class="question-card">
+        <div class="question-title">27. In K-Means++, after selecting the first centroid $c_1$ uniformly at random, how is the probability of selecting point $x_i$ as the second centroid calculated?</div>
+        <ul class="options-list">
+            <li>A) $P(x_i) = \frac{1}{N}$</li>
+            <li>B) $P(x_i) = \frac{D(x_i)^2}{\sum_j D(x_j)^2}$ where $D(x_i)$ is distance to nearest already chosen centroid.</li>
+            <li>C) $P(x_i) = \frac{1}{D(x_i)}$</li>
+            <li>D) $P(x_i) = \frac{\text{mean}(x_i)}{\text{std}(x_i)}$</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> The probability distribution scales with squared distance to the nearest existing centroid, making distant points far more likely to become next centroids.
+        </div>
+    </div>
+
+    <!-- Question 28 -->
+    <div class="question-card">
+        <div class="question-title">28. How does Elkan’s K-Means algorithm accelerate traditional K-Means training?</div>
+        <ul class="options-list">
+            <li>A) By reducing feature dimension using PCA during each step.</li>
+            <li>B) By exploiting the triangle inequality to avoid unnecessary distance calculations between points and distant centroids.</li>
+            <li>C) By skipping the centroid update phase completely.</li>
+            <li>D) By computing distance using binary operations only.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Elkan's algorithm uses lower and upper bounds derived from the triangle inequality to skip computing point-centroid distances when proven unnecessary.
+        </div>
+    </div>
+
+    <!-- Question 29 -->
+    <div class="question-card">
+        <div class="question-title">29. What trade-off is accepted when utilizing Mini-Batch K-Means instead of standard regular K-Means?</div>
+        <ul class="options-list">
+            <li>A) Mini-Batch K-Means is 3.5x slower but yields slightly lower inertia.</li>
+            <li>B) Mini-Batch K-Means is significantly faster (~3.5x) and handles huge datasets in memory, but produces slightly higher inertia (slightly worse quality).</li>
+            <li>C) Mini-Batch K-Means requires $k$ to be automatically set to 10.</li>
+            <li>D) Mini-Batch K-Means cannot predict on new unseen data.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Mini-Batch K-Means speeds up computation drastically by updating centroids on random mini-batches, at the cost of slightly higher inertia.
+        </div>
+    </div>
+
+    <!-- Question 30 -->
+    <div class="question-card">
+        <div class="question-title">30. When dealing with massive datasets that do not fit into system RAM, which tools/methods can be used alongside Scikit-Learn’s `MiniBatchKMeans`?</div>
+        <ul class="options-list">
+            <li>A) Using `np.memmap` for memory-mapped files and calling the `partial_fit()` method.</li>
+            <li>B) Converting data into PNG image arrays using Pillow.</li>
+            <li>C) Disabling all feature columns except the first one.</li>
+            <li>D) Using standard `fit()` inside a basic `for` loop without mini-batches.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> `memmap` allows reading disk-stored binary arrays efficiently, while `partial_fit()` trains `MiniBatchKMeans` incrementally stream-by-stream.
+        </div>
+    </div>
+
+    <!-- Question 31 -->
+    <div class="question-card">
+        <div class="question-title">31. What happens to the Inertia metric (WCSS) as the number of clusters $k$ increases?</div>
+        <ul class="options-list">
+            <li>A) It strictly increases.</li>
+            <li>B) It strictly decreases (monotonically) toward zero.</li>
+            <li>C) It remains constant.</li>
+            <li>D) It oscillates unpredictably.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Adding more centroids always reduces distances between points and their nearest center; inertia monotonically decreases as $k$ increases.
+        </div>
+    </div>
+
+    <!-- Question 32 -->
+    <div class="question-card">
+        <div class="question-title">32. Why is choosing $k$ based solely on minimizing Inertia a flawed approach?</div>
+        <ul class="options-list">
+            <li>A) Because inertia becomes negative for $k > 5$.</li>
+            <li>B) Because inertia reaches its absolute minimum (zero) when $k = N$ (each point is its own cluster), leading to severe over-segmentation.</li>
+            <li>C) Because inertia calculation ignores feature dimensions.</li>
+            <li>D) Because inertia can only be computed when $k=2$.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Smaller inertia does not inherently mean better clustering; setting $k=N$ yields zero inertia but provides useless, trivial single-instance clusters.
+        </div>
+    </div>
+
+    <!-- Question 33 -->
+    <div class="question-card">
+        <div class="question-title">33. What occurs when an inappropriately small value of $k$ (e.g., $k=3$ on a dataset with 5 natural groups) is selected?</div>
+        <ul class="options-list">
+            <li>A) Clusters are chopped into multiple small fragments.</li>
+            <li>B) Separate, distinct natural clusters are merged together into single clusters.</li>
+            <li>C) The algorithm fails to assign points to centroids.</li>
+            <li>D) Centroids shift to infinity.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Under-estimating $k$ forces the model to consolidate genuinely distinct data groupings into overly broad merged clusters.
+        </div>
+    </div>
+
+    <!-- Question 34 -->
+    <div class="question-card">
+        <div class="question-title">34. What occurs when an excessively large value of $k$ (e.g., $k=8$ on a dataset with 5 natural groups) is selected?</div>
+        <ul class="options-list">
+            <li>A) Separate clusters get merged together.</li>
+            <li>B) Well-defined natural clusters get chopped/split unnecessarily into multiple pieces.</li>
+            <li>C) The algorithm crashes due to missing centroids.</li>
+            <li>D) Silhouette score increases to $+2.0$.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Over-estimating $k$ forces extra centroids into cohesive groups, fragmenting valid natural clusters into redundant sub-clusters.
+        </div>
+    </div>
+
+    <!-- Question 35 -->
+    <div class="question-card">
+        <div class="question-title">35. In the Elbow Method plot (Inertia vs. $k$), what does the "Elbow" or inflection point physically represent?</div>
+        <ul class="options-list">
+            <li>A) The point where Inertia becomes zero.</li>
+            <li>B) The point of diminishing marginal returns, where increasing $k$ beyond this value yields significantly smaller reductions in Inertia.</li>
+            <li>C) The point where the maximum number of iterations was reached.</li>
+            <li>D) The point where execution speed drops by half.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> The elbow marks an inflection point where the rate of decrease in WCSS drops sharply, balancing compactness with model parsimony.
+        </div>
+    </div>
+
+
+    <!-- Question 36 -->
+    <div class="question-card">
+        <div class="question-title">36. What is the mathematical definition of the Silhouette Coefficient $s(i)$ for an instance $i$?</div>
+        <ul class="options-list">
+            <li>A) $s(i) = \frac{a(i) - b(i)}{\min(a(i), b(i))}$</li>
+            <li>B) $s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}$</li>
+            <li>C) $s(i) = a(i) \times b(i)$</li>
+            <li>D) $s(i) = \frac{a(i) + b(i)}{2}$</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Silhouette score $s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}$, where $a(i)$ is mean intra-cluster distance and $b(i)$ is mean nearest-cluster distance.
+        </div>
+    </div>
+
+    <!-- Question 37 -->
+    <div class="question-card">
+        <div class="question-title">37. In the Silhouette formula, what do parameters $a(i)$ and $b(i)$ represent?</div>
+        <ul class="options-list">
+            <li>A) $a(i)$: distance to origin; $b(i)$: distance to furthest point.</li>
+            <li>B) $a(i)$: mean intra-cluster distance (cohesion); $b(i)$: mean distance to points in the nearest neighboring cluster (separation).</li>
+            <li>C) $a(i)$: total points in cluster; $b(i)$: total clusters.</li>
+            <li>D) $a(i)$: variance of feature 1; $b(i)$: variance of feature 2.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> $a(i)$ measures internal cluster compactness (cohesion), while $b(i)$ measures distance to the closest adjacent cluster (separation).
+        </div>
+    </div>
+
+    <!-- Question 38 -->
+    <div class="question-card">
+        <div class="question-title">38. What is the numerical range of the Silhouette Coefficient, and what does a value near $+1.0$ signify?</div>
+        <ul class="options-list">
+            <li>A) Range $[0, 100]$; signifies 100% classification accuracy.</li>
+            <li>B) Range $[-1, +1]$; signifies that the instance is well inside its own cluster and far from neighboring clusters.</li>
+            <li>C) Range $[-\infty, +\infty]$; signifies that inertia is zero.</li>
+            <li>D) Range $[-1, 0]$; signifies that the instance is misclustered.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Silhouette values span $[-1, +1]$. A value near $+1$ indicates $b(i) \gg a(i)$, representing excellent clustering separation and cohesion.
+        </div>
+    </div>
+
+    <!-- Question 39 -->
+    <div class="question-card">
+        <div class="question-title">39. What does a Silhouette Coefficient $s(i) \approx 0$ indicate about data point $i$?</div>
+        <ul class="options-list">
+            <li>A) The point is an extreme outlier located far away from all data.</li>
+            <li>B) The point lies very close to the decision boundary between two neighboring clusters ($a \approx b$).</li>
+            <li>C) The point forms its own separate cluster.</li>
+            <li>D) The feature dimensions of the point are zero.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> When $a(i) \approx b(i)$, $s(i) \to 0$, showing the instance is located on or near the boundary separating two clusters.
+        </div>
+    </div>
+
+    <!-- Question 40 -->
+    <div class="question-card">
+        <div class="question-title">40. In a Silhouette Diagram visualization, what do the height and width of each cluster’s "knife/blade" shape represent?</div>
+        <ul class="options-list">
+            <li>A) Height: feature dimension; Width: execution time.</li>
+            <li>B) Height: number of instances in the cluster; Width: sorted Silhouette coefficients of instances in that cluster.</li>
+            <li>C) Height: centroid x-coordinate; Width: centroid y-coordinate.</li>
+            <li>D) Height: WCSS value; Width: cluster index.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Vertical thickness (height) reflects sample count in the cluster; horizontal extent (width) shows individual instance Silhouette scores.
+        </div>
+    </div>
+
+    <!-- Question 41 -->
+    <div class="question-card">
+        <div class="question-title">41. When analyzing a Silhouette Diagram for evaluating cluster quality, what visual indicator signals an optimal choice of $k$?</div>
+        <ul class="options-list">
+            <li>A) All knife shapes extend past the dashed red line (average Silhouette score) and have similar heights/thicknesses.</li>
+            <li>B) The knife shapes extend into negative values.</li>
+            <li>C) One knife shape is 10 times thicker than all others.</li>
+            <li>D) The dashed red line aligns with zero on the horizontal axis.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Good clustering exhibits clusters that consistently exceed average Silhouette performance (dashed line) with balanced cluster sizes (similar blade heights).
+        </div>
+    </div>
+
+    <!-- Question 42 -->
+    <div class="question-card">
+        <div class="question-title">42. Why does K-Means struggle significantly when clustering non-spherical shapes, such as ellipsoidal blobs or crescent moons?</div>
+        <ul class="options-list">
+            <li>A) Because K-Means assumes isotropic (spherical) clusters and partitions space linearly via Euclidean distance.</li>
+            <li>B) Because non-spherical shapes cause numerical overflow in Scikit-Learn.</li>
+            <li>C) Because centroids cannot be computed for non-spherical groups.</li>
+            <li>D) Because WCSS cannot be calculated for non-spherical data.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> K-Means inherently assumes clusters are spherical/convex because distance is measured equally in all directions from a central mean.
+        </div>
+    </div>
+
+    <!-- Question 43 -->
+    <div class="question-card">
+        <div class="question-title">43. What is the impact of failing to scale input features (e.g., Standard Scaling) before executing K-Means?</div>
+        <ul class="options-list">
+            <li>A) The algorithm will run 10 times faster.</li>
+            <li>B) Features with larger numerical scales/variances will dominate Euclidean distance calculations, stretching clusters and degrading clustering quality.</li>
+            <li>C) The algorithm will convert all feature values to zero.</li>
+            <li>D) Scikit-Learn will throw an unhandled exception.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Unscaled features distort distance metrics, causing large-scale features to heavily bias cluster assignments over small-scale features.
+        </div>
+    </div>
+
+    <!-- Question 44 -->
+    <div class="question-card">
+        <div class="question-title">44. Does feature scaling guarantee that all clusters produced by K-Means will be perfectly spherical?</div>
+        <ul class="options-list">
+            <li>A) Yes, scaling automatically transforms arbitrary data manifolds into pure spheres.</li>
+            <li>B) No, scaling generally helps K-Means performance, but does not guarantee that underlying complex non-spherical geometries become spherical.</li>
+            <li>C) Yes, provided Min-Max scaling is used instead of Standard Scaling.</li>
+            <li>D) No, feature scaling causes spherical clusters to elongate into ellipsoids.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Scaling ensures equal feature weight in Euclidean distance, but cannot fundamentally alter non-spherical topological shapes in raw data.
+        </div>
+    </div>
+
+    <!-- Question 45 -->
+    <div class="question-card">
+        <div class="question-title">45. How do cluster size and density variations affect standard K-Means performance?</div>
+        <ul class="options-list">
+            <li>A) K-Means performs identically regardless of density or size differences.</li>
+            <li>B) K-Means struggles because it prefers clusters of similar sizes/densities, often splitting large or sparse clusters.</li>
+            <li>C) K-Means automatically merges small clusters into sparse clusters.</li>
+            <li>D) Variations in density cause $k$ to increase dynamically.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> K-Means minimizes global variance (Inertia), making it prone to splitting large or lower-density clusters to accommodate distance penalties.
+        </div>
+    </div>
+
+
+    <!-- Question 46 -->
+    <div class="question-card">
+        <div class="question-title">46. What is Image Segmentation defined as in computer vision?</div>
+        <ul class="options-list">
+            <li>A) The process of rotating an image by 90 degrees.</li>
+            <li>B) The task of partitioning a digital image into multiple segments (regions or pixel groups) to simplify analysis.</li>
+            <li>C) Converting color images into 1-bit binary images.</li>
+            <li>D) Compressing image file format from PNG to JPEG.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Image segmentation partitions an image into distinct segments sharing meaningful attributes (color, object type, individual instances).
+        </div>
+    </div>
+
+    <!-- Question 47 -->
+    <div class="question-card">
+        <div class="question-title">47. In the context of Image Segmentation, what characterizes Color Segmentation?</div>
+        <ul class="options-list">
+            <li>A) Assigning pixels belonging to the same object type to one segment.</li>
+            <li>B) Assigning pixels with similar color properties (RGB values) to the same segment regardless of spatial location or object type.</li>
+            <li>C) Assigning each individual pedestrian a unique ID mask.</li>
+            <li>D) Filtering out black and white pixels from image arrays.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Color segmentation groups pixels purely by spectral similarity (color vectors), ignoring spatial topology or high-level semantics.
+        </div>
+    </div>
+
+    <!-- Question 48 -->
+    <div class="question-card">
+        <div class="question-title">48. How does Semantic Segmentation differ from Color Segmentation?</div>
+        <ul class="options-list">
+            <li>A) Semantic segmentation groups pixels by object class/type (e.g., all "car" pixels grouped together), requiring high-level category awareness.</li>
+            <li>B) Semantic segmentation requires $k=2$ clusters exclusively.</li>
+            <li>C) Semantic segmentation ignores object types and uses color only.</li>
+            <li>D) Semantic segmentation works only on satellite images.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Semantic segmentation classifies pixels based on object categories (pedestrian, road, sky), regardless of color variations.
+        </div>
+    </div>
+
+    <!-- Question 49 -->
+    <div class="question-card">
+        <div class="question-title">49. What key feature defines Instance Segmentation over Semantic Segmentation?</div>
+        <ul class="options-list">
+            <li>A) Instance segmentation groups all objects of a class into one mask.</li>
+            <li>B) Instance segmentation differentiates separate individual objects within the same class (e.g., Pedestrian 1 vs. Pedestrian 2).</li>
+            <li>C) Instance segmentation processes grayscale images only.</li>
+            <li>D) Instance segmentation replaces neural networks with K-Means.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Instance segmentation goes beyond semantic class labeling by identifying and masking every individual object instance separately.
+        </div>
+    </div>
+
+    <!-- Question 50 -->
+    <div class="question-card">
+        <div class="question-title">50. Which real-world application relies heavily on Color Segmentation?</div>
+        <ul class="options-list">
+            <li>A) Tracking individual cars in traffic camera streams.</li>
+            <li>B) Analyzing satellite imagery to measure environmental regions (e.g., measuring total forest area).</li>
+            <li>C) Self-driving car steering control systems.</li>
+            <li>D) Facial recognition unlocking algorithms.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Satellite land-cover analysis (e.g., identifying forest vs. water) commonly employs spectral color/band segmentation.
+        </div>
+    </div>
+
+    <!-- Question 51 -->
+    <div class="question-card">
+        <div class="question-title">51. Which real-world application requires Semantic Segmentation?</div>
+        <ul class="options-list">
+            <li>A) Autonomous vehicles needing to group all road/pedestrian pixels for navigation mapping.</li>
+            <li>B) Quantizing image colors to reduce file storage size.</li>
+            <li>C) Converting RGB photos to HSV.</li>
+            <li>D) Randomizing pixel intensity values.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Autonomous driving systems use semantic segmentation to parse drivable road surfaces, sidewalks, and surrounding entities by class.
+        </div>
+    </div>
+
+    <!-- Question 52 -->
+    <div class="question-card">
+        <div class="question-title">52. State-of-the-art methods for Semantic and Instance Segmentation are primarily achieved using which technology?</div>
+        <ul class="options-list">
+            <li>A) Simple decision trees.</li>
+            <li>B) Complex deep learning architectures based on Convolutional Neural Networks (CNNs).</li>
+            <li>C) Unsupervised K-Means clustering.</li>
+            <li>D) Linear discriminant analysis (LDA).</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Advanced spatial and semantic image understanding relies on deep Convolutional Neural Networks (CNNs) trained on labeled masks.
+        </div>
+    </div>
+
+    <!-- Question 53 -->
+    <div class="question-card">
+        <div class="question-title">53. Which Python library is used in Chapter 2 for image manipulation and loading image files into arrays?</div>
+        <ul class="options-list">
+            <li>A) OpenCV</li>
+            <li>B) Pillow (PIL - Python Imaging Library successor)</li>
+            <li>C) Matplotlib image module</li>
+            <li>D) ImageMagick</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Chapter 2 explicitly highlights `Pillow` (`PIL`) for opening, reading, and preparing image data arrays.
+        </div>
+    </div>
+
+    <!-- Question 54 -->
+    <div class="question-card">
+        <div class="question-title">54. When an image is loaded using Pillow and converted into a NumPy array, what is its 3D array shape convention?</div>
+        <ul class="options-list">
+            <li>A) `(color_channels, width, height)`</li>
+            <li>B) `(height, width, color_channels)`</li>
+            <li>C) `(width, height, color_channels)`</li>
+            <li>D) `(height, color_channels, width)`</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Image arrays are structured as `(height, width, color_channels)` representing rows, columns, and RGB color channels.
+        </div>
+    </div>
+
+    <!-- Question 55 -->
+    <div class="question-card">
+        <div class="question-title">55. An image array output has shape `(533, 800, 3)`. What does the value `3` specifically represent?</div>
+        <ul class="options-list">
+            <li>A) 3 spatial dimensions (X, Y, Z coordinates).</li>
+            <li>B) The 3 color channels: Red, Green, and Blue (RGB).</li>
+            <li>C) 3 cluster centroids.</li>
+            <li>D) 3 image layers.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> The third dimension size of 3 corresponds to the RGB spectral channels.
+        </div>
+    </div>
+
+
+    <!-- Question 56 -->
+    <div class="question-card">
+        <div class="question-title">56. What is the numerical range for each intensity value in a standard 8-bit RGB color vector?</div>
+        <ul class="options-list">
+            <li>A) $0.0$ to $1.0$</li>
+            <li>B) $-128$ to $+127$</li>
+            <li>C) $0$ to $255$</li>
+            <li>D) $0$ to $1024$</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: C</strong><br>
+            <em>Explanation:</em> Standard 8-bit image channels represent color intensities as integers ranging from 0 to 255.
+        </div>
+    </div>
+
+    <!-- Question 57 -->
+    <div class="question-card">
+        <div class="question-title">57. To apply K-Means clustering to an image array of shape `(533, 800, 3)`, what transformation must be performed first?</div>
+        <ul class="options-list">
+            <li>A) Transpose the array to `(3, 533, 800)`.</li>
+            <li>B) Reshape the 3D array into a 2D array of shape `(533 * 800, 3)` = `(426400, 3)`.</li>
+            <li>C) Convert all values to strings.</li>
+            <li>D) Drop the height dimension.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Scikit-Learn algorithms require 2D matrix input `(n_samples, n_features)`. Reshaping flattens pixels to rows while keeping 3 RGB features.
+        </div>
+    </div>
+
+    <!-- Question 58 -->
+    <div class="question-card">
+        <div class="question-title">58. When fitting `KMeans(n_clusters=8)` on a reshaped image array `(426400, 3)`, what do the 8 resulting centroids represent?</div>
+        <ul class="options-list">
+            <li>A) The 8 dominant color vectors $[R, G, B]$ in the image.</li>
+            <li>B) The spatial center coordinates $(x, y)$ of 8 image segments.</li>
+            <li>C) The 8 brightest pixels in the corners.</li>
+            <li>D) The 8 highest contrast edges.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Clustering in RGB space groups similar color vectors, producing 8 mean color centroids representing dominant quantized colors.
+        </div>
+    </div>
+
+    <!-- Question 59 -->
+    <div class="question-card">
+        <div class="question-title">59. During image segmentation reconstruction using K-Means, how is each pixel's original color updated?</div>
+        <ul class="options-list">
+            <li>A) It is replaced by the mean RGB value of its assigned cluster centroid.</li>
+            <li>B) It is set to pure black $(0,0,0)$.</li>
+            <li>C) It is multiplied by its spatial coordinate index.</li>
+            <li>D) It is averaged with its 4 neighboring pixels.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Reconstructing the segmented image replaces every original pixel color with the RGB values of its cluster centroid.
+        </div>
+    </div>
+
+    <!-- Question 60 -->
+    <div class="question-card">
+        <div class="question-title">60. After replacing pixel color values with centroid colors, what step restores the image to a printable visual format?</div>
+        <ul class="options-list">
+            <li>A) Sorting pixel values in ascending order.</li>
+            <li>B) Reshaping the 2D matrix back to its original 3D dimensions `(height, width, 3)`.</li>
+            <li>C) Converting the matrix into a 1D scalar list.</li>
+            <li>D) Applying min-max scaling to cluster labels.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Reshaping back to `(height, width, 3)` restores 2D spatial grid arrangement required for image rendering.
+        </div>
+    </div>
+
+    <!-- Question 61 -->
+    <div class="question-card">
+        <div class="question-title">61. What visual effect occurs when performing K-Means image segmentation with a very small cluster count (e.g., $k=2$ or $k=3$)?</div>
+        <ul class="options-list">
+            <li>A) Image resolution doubles automatically.</li>
+            <li>B) Distinct minority colors merge into dominant surrounding color clusters, losing fine visual details.</li>
+            <li>C) The image becomes completely transparent.</li>
+            <li>D) Individual pixels form isolated circular shapes.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Low $k$ values force distinct less-frequent colors to absorb into major background color centroids, smoothing out detail.
+        </div>
+    </div>
+
+    <!-- Question 62 -->
+    <div class="question-card">
+        <div class="question-title">62. In the ladybug segmentation experiment, why does the ladybug’s distinct red color get merged into background colors when using low cluster numbers?</div>
+        <ul class="options-list">
+            <li>A) Because red colors have lower numerical RGB values than green.</li>
+            <li>B) Because the ladybug occupies a tiny spatial region (few pixels); K-Means minimizes global WCSS and favors larger color regions.</li>
+            <li>C) Because Pillow strips red channel data during array loading.</li>
+            <li>D) Because K-Means ignores red color vectors entirely.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Small objects contribute minimally to total WCSS. K-Means prioritizes capturing massive color regions over small isolated pockets.
+        </div>
+    </div>
+
+    <!-- Question 63 -->
+    <div class="question-card">
+        <div class="question-title">63. Why does K-Means exhibit an inherent bias toward forming clusters of similar sizes?</div>
+        <ul class="options-list">
+            <li>A) Because its objective function minimizes overall sum of squared Euclidean distances across all instances globally.</li>
+            <li>B) Because Scikit-Learn explicitly balances cluster sizes using an internal constraint.</li>
+            <li>C) Because centroids are forced to maintain equal spatial spacing.</li>
+            <li>D) Because image dimensions must be symmetrical.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Minimizing global WCSS penalizes large spread/variance, causing K-Means to divide large groups while neglecting very small clusters.
+        </div>
+    </div>
+
+    <!-- Question 64 -->
+    <div class="question-card">
+        <div class="question-title">64. How can an analyst ensure that a small object with a distinct color (like the ladybug) receives its own dedicated cluster in K-Means segmentation?</div>
+        <ul class="options-list">
+            <li>A) By reducing $k$ to 2.</li>
+            <li>B) By increasing the cluster hyperparameter $k$ so additional centroids can adapt to smaller color sub-populations.</li>
+            <li>C) By converting the image to grayscale before training.</li>
+            <li>D) By setting `n_init=1`.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Increasing $k$ provides sufficient centroid capacity for minor distinct color groups after primary dominant colors are represented.
+        </div>
+    </div>
+
+    <!-- Question 65 -->
+    <div class="question-card">
+        <div class="question-title">65. Why does standard K-Means color segmentation fail to guarantee spatially contiguous (connected) segments in an image?</div>
+        <ul class="options-list">
+            <li>A) Because standard K-Means operates solely in pixel color space $[R, G, B]$ and ignores spatial coordinates $(x, y)$.</li>
+            <li>B) Because Pillow arrays shuffle pixel order during loading.</li>
+            <li>C) Because Euclidean distance cannot be calculated in 2D space.</li>
+            <li>D) Because image arrays contain missing spatial labels.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Without spatial coordinates $[x, y]$ included in feature vectors, pixels anywhere in the image with similar RGB values share the same cluster.
+        </div>
+    </div>
+
+
+    <!-- Question 66 -->
+    <div class="question-card">
+        <div class="question-title">66. If pixel spatial coordinates $(x, y)$ were concatenated with color vectors $[R, G, B]$ to form a 5D feature vector $[R, G, B, x, y]$, what change would occur in K-Means segmentation?</div>
+        <ul class="options-list">
+            <li>A) Clusters would consider both color similarity and spatial proximity, favoring localized, contiguous image segments.</li>
+            <li>B) The image array shape would become 1D.</li>
+            <li>C) Color information would be completely erased.</li>
+            <li>D) K-Means would operate 100 times faster.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: A</strong><br>
+            <em>Explanation:</em> Including spatial coordinates $(x, y)$ forces distance calculations to penalize spatially distant pixels, enforcing spatial locality.
+        </div>
+    </div>
+
+    <!-- Question 67 -->
+    <div class="question-card">
+        <div class="question-title">67. What is Color Quantization in digital image processing?</div>
+        <ul class="options-list">
+            <li>A) Increasing image resolution by interpolating pixels.</li>
+            <li>B) Reducing the number of unique colors used in an image while preserving its visual structure as closely as possible.</li>
+            <li>C) Converting color channels into audio signals.</li>
+            <li>D) Encrypting image arrays using random keys.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Color quantization compresses image color palettes by mapping many original colors to a small set of representative colors ($k$).
+        </div>
+    </div>
+
+    <!-- Question 68 -->
+    <div class="question-card">
+        <div class="question-title">68. What is the mathematical relationship between the number of clusters $k$ and quantization error (reconstruction loss) in image segmentation?</div>
+        <ul class="options-list">
+            <li>A) As $k$ increases, quantization error increases.</li>
+            <li>B) As $k$ increases, quantization error decreases monotonically.</li>
+            <li>C) Quantization error remains constant for all $k$.</li>
+            <li>D) Quantization error reaches infinity when $k=8$.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> More cluster centers allow quantized pixel colors to closely match original colors, reducing reconstruction error (WCSS).
+        </div>
+    </div>
+
+    <!-- Question 69 -->
+    <div class="question-card">
+        <div class="question-title">69. Consider a dataset where clusters are concentric circles (one ring surrounding an inner dot). What outcome will standard K-Means produce?</div>
+        <ul class="options-list">
+            <li>A) It will perfectly separate the outer ring from the inner dot.</li>
+            <li>B) It will fail to separate the ring and dot cleanly, bisecting the data with linear boundaries because it partitions space convexly.</li>
+            <li>C) It will automatically switch to a spectral kernel.</li>
+            <li>D) It will output a Silhouette score of $+1.0$.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Concentric structures are non-convex. K-Means forms linear Voronoi boundaries, slicing through non-convex shapes incorrectly.
+        </div>
+    </div>
+
+    <!-- Question 70 -->
+    <div class="question-card">
+        <div class="question-title">70. Which preprocessing pipeline step is essential before applying K-Means to general tabular data with mixed feature scales?</div>
+        <ul class="options-list">
+            <li>A) One-hot encoding target labels.</li>
+            <li>B) Feature scaling (e.g., `StandardScaler` or `MinMaxScaler`) to standardize feature variances and prevent metric distortion.</li>
+            <li>C) Converting all numeric features to integers.</li>
+            <li>D) Reshaping tables into 3D image tensors.</li>
+        </ul>
+        <div class="answer-box">
+            <strong>Correct Answer: B</strong><br>
+            <em>Explanation:</em> Feature scaling normalizes feature scales, ensuring distance metrics treat all attributes equitably during centroid calculation.
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
